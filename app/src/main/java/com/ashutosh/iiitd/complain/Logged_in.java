@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import java.io.*;
+import android.os.Environment;
 
 public class Logged_in extends AppCompatActivity {
 
@@ -49,15 +50,26 @@ public class Logged_in extends AppCompatActivity {
 
                 FileOutputStream fos;
                 try {
-                    File myFile = new File("/sdcard/"+filename);
-                    myFile.createNewFile();
-                    FileOutputStream fOut = new FileOutputStream(myFile);
-                    OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-                    myOutWriter.append(data);
-                    myOutWriter.close();
-                    fOut.close();
 
-                    Toast.makeText(getApplicationContext(),filename + " saved",Toast.LENGTH_LONG).show();
+                    if(isExternalStorageWritable()){
+
+                        File myFile = new File("/sdcard/"+filename);
+                        myFile.createNewFile();
+                        FileOutputStream fOut = new FileOutputStream(myFile);
+                        OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+                        myOutWriter.append(data);
+                        myOutWriter.close();
+                        fOut.close();
+
+                        Toast.makeText(getApplicationContext(),filename + " saved",Toast.LENGTH_LONG).show();
+
+                    }
+
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(),"Could not Write",Toast.LENGTH_LONG).show();
+                    }
+
 
                 }
                 catch (FileNotFoundException e) {e.printStackTrace();}
@@ -67,5 +79,14 @@ public class Logged_in extends AppCompatActivity {
 
         });
 
+    }
+
+    /* Checks if external storage is available for read and write */
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
     }
 }
