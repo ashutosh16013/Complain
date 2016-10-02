@@ -37,6 +37,15 @@ public class RegisterAct extends AppCompatActivity {
 
         sharedpref = getSharedPreferences(MyPREF, Context.MODE_PRIVATE);
 
+        if (sharedpref.contains(Email)) {
+            String mail = sharedpref.getString(Email, "");
+            memail.setText(mail);
+        }
+        if (sharedpref.contains(Pass)) {
+            String pass = sharedpref.getString(Pass, "");
+            mpass.setText(pass);
+        }
+
         //Setting an ONClickListener button for registration
         //That enters data into database
         Button reg_button = (Button)findViewById(R.id.reg_button);
@@ -49,8 +58,8 @@ public class RegisterAct extends AppCompatActivity {
                 String pass = mpass.getText().toString();
                 obj_db.insertContact(fname,lname,email,pass);
                 SharedPreferences.Editor editor = sharedpref.edit();
-                editor.putString(Email, email);
-                editor.putString(Pass, pass);
+                editor.putString(Email, "dummy@gmail.com");
+                editor.putString(Pass, "dummy");
                 editor.commit();
                 Toast.makeText(getApplicationContext(),"Registered Successfully, Please Login",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(RegisterAct.this,LoginActivity.class);
